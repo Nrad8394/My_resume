@@ -1,8 +1,4 @@
-/**
-* PHP Email Form Validation - v3.7
-* URL: https://bootstrapmade.com/php-email-form/
-* Author: BootstrapMade.com
-*/
+
 (function () {
   "use strict";
 
@@ -56,30 +52,31 @@
       headers: {'X-Requested-With': 'XMLHttpRequest'}
     })
     .then(response => {
-      if( response.ok ) {
-        return response.text();
+      if (response.ok) {
+        console.log(response)
+          return response.json(); // Parse response JSON
       } else {
-        throw new Error(`${response.status} ${response.statusText} ${response.url}`); 
+          throw new Error(`${response.status} ${response.statusText} ${response.url}`);
       }
-    })
-    .then(data => {
+  })
+  .then(data => {
       thisForm.querySelector('.loading').classList.remove('d-block');
-      if (data.trim() == 'OK') {
-        thisForm.querySelector('.sent-message').classList.add('d-block');
-        thisForm.reset(); 
+      if (data.ok) {
+          thisForm.querySelector('.sent-message').classList.add('d-block');
+          thisForm.reset();
       } else {
-        throw new Error(data ? data : 'Form submission failed and no error message returned from: ' + action); 
+          throw new Error(data.error ? data.error : 'Form submission failed and no error message returned from: ' + action);
       }
-    })
-    .catch((error) => {
+  })
+  .catch((error) => {
       displayError(thisForm, error);
-    });
-  }
+  });
+  
 
   function displayError(thisForm, error) {
     thisForm.querySelector('.loading').classList.remove('d-block');
     thisForm.querySelector('.error-message').innerHTML = error;
     thisForm.querySelector('.error-message').classList.add('d-block');
   }
-
+  }
 })();
